@@ -1,0 +1,129 @@
+---
+title: "Complex tables with ftables"
+author: "Jose Manuel Valdeolmillos"
+date: "11 de mayo de 2016"
+output: html_document
+---
+
+## Introducción:
+
+Para tablas de 3 o más variables. Para Cross-Tabulation. Se trabaja con los parámetros row.vars y col.vars.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Ejercicio 1: Carga de datos y presentación por pantalla
+
+Para el trabajo con ftables() se usará el dataFrame Titanic.
+
+Primero cargamos los datos y posteriormente se muestra por pantalla el dataFrame formateado:
+
+```{r ejercicio_1}
+
+data(Titanic)
+
+# Visualizacion
+ftable(Titanic)
+
+```
+
+
+## Ejercicio 2:  Uso del parámetro row.vars
+
+Con row.vars, pasamos las variables que se formatearán como filas (rows):
+
+```{r ejercicio_2}
+
+ftable(Titanic, row.vars = "Class")
+
+```
+
+
+## Ejercicio 3:  Uso del parámetro row.vars y col.vars
+
+Uso de row.vars y col.vars de forma conjunta. Recordar que podemos pasar las vars tanto por número como por nombre:
+
+```{r ejercicio_3}
+
+ftable(Titanic, row.vars = c("Class", "Sex"), col.vars = "Survived")
+
+```
+
+
+## Ejercicio 4:  Sobre el Ejercicio 3. Cambio posición variables en row.vars
+
+Cambiamos el orden en row.vars:
+
+```{r ejercicio_4}
+
+ftable(Titanic, row.vars = c("Sex", "Class"), col.vars = "Survived")
+
+```
+
+
+## Ejercicio 5:  Sobre el Ejercicio 4. Cambio variables en col.vars
+
+Cambiamos col.vars:
+
+```{r ejercicio_5}
+
+ftable(Titanic, row.vars = c("Sex", "Class"), col.vars = "Age")
+
+```
+
+
+## Ejercicio 6:  Sobre el Ejercicio 5. Uso de data.frame()
+
+Vamos a "desgranar" la tabla:
+
+```{r ejercicio_6}
+
+data.frame(ftable(Titanic, row.vars = c("Sex", "Class"), col.vars = "Age"))
+
+```
+
+
+## Ejercicio 7:  Uso de fórmulas ftable.formula
+
+Usa el interface de formula la cantidades en Titanic para sexo de pasajeros, por clase y edad.
+
+```{r ejercicio_7}
+
+ftable(Sex ~ Class + Age, data = Titanic)
+
+```
+
+
+## Ejercicio 8:  Sobre el Ejercicio 5. Mostrar que ftable crea una clase.
+
+Guardamos un objeto ftable en variable:
+
+```{r ejercicio_8}
+
+titanicStat <- ftable(Titanic, row.vars = c("Sex", "Class"), col.vars = "Age")
+
+```
+
+
+## Ejercicio 9:  Guardar en un fichero la variable ftable.
+
+Guardamos en un fichero la variable:
+
+```{r ejercicio_9}
+
+write.ftable(titanicStat, file = "table1")
+
+```
+
+
+## Ejercicio 10:  Leer un fichero con una ftable.
+
+Cargamos en una variable ftable el fichero anterior:
+
+```{r ejercicio_10}
+
+data1 <- read.ftable("table1")
+
+```

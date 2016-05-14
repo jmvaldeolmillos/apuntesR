@@ -1,0 +1,151 @@
+---
+title: "Uso de xtabs()"
+author: "Jose Manuel Valdeolmillos"
+date: "13 de mayo de 2016"
+output: html_document
+---
+
+## Introduccion:
+
+Uso de xtabs() para crear tablas de contingecia.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Carga de datos.
+
+Primero cargamos los datos y posteriormente se muestra por pantalla el dataFrame formateado:
+
+```{r carga}
+
+Data1 <- data.frame(Reference = c("KRXH", "KRPT", "FHRA", "CZKK", "CQTN", "PZXW", "SZRZ", "RMZE", "STNX", "TMDW"), Status = c("Accepted", "Accepted", "Rejected", "Accepted", "Rejected", "Accepted", "Rejected", "Rejected", "Accepted", "Accepted"), Gender = c("Female", "Male", "Male", "Female", "Female", "Female", "Male", "Female", "Female", "Female"), Test = c("Test1", "Test1", "Test2", "Test3", "Test1", "Test4", "Test4", "Test2", "Test3", "Test1"), NewOrFollowUp = c("New", "New", "New", "New", "New", "Follow-up", "New", "New", "New", "New"))
+
+
+# Visualizacion
+head(Data1)
+
+```
+
+
+## Ejercicio 1 - Mostrar conteo de Status.
+
+The xtabs() function can display the frequency, or count, of the levels of categorical variables. For the first exercise, use the xtabs() function to find the count of levels in the variable, “Status“, within the above dataframe, “Data1“.
+
+```{r ejercicio_1}
+
+xtabs(~Status, data = Data1)
+
+```
+
+
+## Ejercicio 2 - Descubrir relacion entre 2 variables.
+
+Next, using the xtabs() function, apply two variables from “Data1“, to create a table delineating the relationship between the “Reference” category, and the “Status” category.
+
+```{r ejercicio_2}
+
+xtabs(~Reference + Status, data = Data1)
+
+```
+
+
+## Ejercicio 3 - Descubrir relacion entre 3 variables o categorias
+
+Apply three variables from “Data1” to create a Multi-Dimensional Cross-Tabulation of “Status“, “Gender“, and “Test“.
+
+```{r ejercicio_3}
+
+xtabs(~Status + Gender + Test, data = Data1)
+
+```
+
+
+## Ejercicio 4 - Creating 2 Dimensional tables from Multi-Dimensional
+
+Enclose the xtabs() formula from Exercise 3 within the “ftable()” function, to display a Multi-Dimensional Cross-Tabulation in two dimensions.
+
+```{r ejercicio_4}
+
+ftable(xtabs(~Status + Gender + Test, data = Data1))
+
+```
+
+
+## Ejercicio 5 - Filas como porcentajes
+
+Con tigerstats sacamos varias estadisticas.
+
+1) Create an xtabs() formula that cross-tabulates “Status“, and “Test“.
+2) Enclose the xtabs() formula in the tigerstats function, “rowPerc()” to display row percentages for “Status” by “Test“.
+
+```{r ejercicio_5a, message=FALSE}
+
+if(!require(tigerstats)) {install.packages("tigerstats"); require(tigerstats)}
+library(tigerstats)
+
+```
+```{r ejercicio_5b}
+
+rowPerc(xtabs(~Status + Test, data = Data1))
+
+```
+
+## Ejercicio 6 - Columnas como porcentajes
+
+1) Create an xtab() formula that cross-tabulates “Reference“, and “Status“.
+2) Use “colPerc()” to display column percentages for “Reference” by “Status“.
+
+```{r ejercicio_6}
+
+colPerc(xtabs(~Reference + Status, data = Data1))
+
+```
+
+
+## Ejercicio 7 - Plotting Cross-Tabulations
+
+Use the “plot()” function, and the “xtabs()” function to plot “Status” by “Gender“.
+
+```{r ejercicio_7}
+
+plot(xtabs(~Status + Gender, data = Data1))
+
+```
+
+
+## Ejercicio 8 - La variable explicativa afecta a la variable respuesta?
+
+In order to examine whether the explanatory variable “Gender” affects the response variable “ Status“, create a two factor xtabs() formula with the Response variable as the first condition, and the Explanatory variable as the second condition.
+
+```{r ejercicio_8}
+
+xtabs(~Status + Gender, data = Data1)
+
+```
+
+
+## Ejercicio 9 - Uso de cbind() con xtabs()
+
+Delante de ~ con cbind() para sacar más de una columna. Las variables de las filas se ponen después del ~
+Using the “cbind()” function within an xtabs() formula can define the last two columns of a flat table of your dataset. The variable after ~ (tilde) will display as the row data. For example, ftable(xtabs(cbind(variable1, variable2) ~ variable3, data=" ")).
+
+For this exercise, create a flat table with columns for “Gender” and “Test“. The row variables are “Reference“.
+
+```{r ejercicio_9}
+
+ftable(xtabs(cbind(Gender, Test) ~ Reference, data=Data1))
+
+```
+
+
+## Ejercicio 10 - Testeando Correlaciones con xtabs()
+
+When processed through the “summary()” function, an xtabs() formula can test for independence of variables. Therefore, use summary() and xtabs() to test for a “Reference” affecting “Status” correlation.
+
+```{r ejercicio_10}
+
+summary(xtabs(~Reference + Status, data=Data1))
+
+```
