@@ -1,0 +1,2 @@
+# apuntesR
+Ejercicios de R
